@@ -10,5 +10,5 @@ Processing simulation by [Jim Bumgardner](http://krazydad.com/about.php)
 
 Try the live demo here: 
 
-[http://krazydad.com/cdm/](krazydad.com/cdm/)
+[krazydad.com/cdm/](http://krazydad.com/cdm/)
 
