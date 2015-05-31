@@ -497,6 +497,9 @@ class LineRail implements Channel {
       float bprim = 2 * m * (c - fixed.x) - 2 * fixed.y;
       float cprim = fixed.y * fixed.y + (c - fixed.x) * (c - fixed.x) - r * r;
       float delta = bprim * bprim - 4*aprim*cprim;
+      if (delta == 0) {
+        println("zero delta");
+      }
       float my1 = (-bprim + sqrt(delta)) / (2 * aprim);
       float mx1 = m * my1 + c;
       float my2 = (-bprim - sqrt(delta)) / (2 * aprim); // use this if it's better
@@ -504,14 +507,19 @@ class LineRail implements Channel {
       // println("V x1,y1 " + x1/inchesToPoints + " " + y1/inchesToPoints + " x2,y2 " + x2/inchesToPoints + " " + y2/inchesToPoints + " fixed " + fixed.x/inchesToPoints + " " + fixed.y/inchesToPoints);
       // println(" aprim,bprim,cprim = " + aprim + " " + bprim + " " + cprim);
       // of the two spots which are best, and pick the one that is A) On the line and B) closest to the moveable gear's current position
-      // println("  mx1,mx2 " + mx1/inchesToPoints + " " + my1/inchesToPoints + " mx2,my2 " + mx2/inchesToPoints + " " + my2/inchesToPoints);
+      // println("  a m=" + m + " c=" + c + " aprim=" + aprim + " bprim=" + bprim + " cprim=" + cprim + " delta=" + delta);
+      // println("  a mx1,mx2 " + mx1/inchesToPoints + " " + my1/inchesToPoints + " mx2,my2 " + mx2/inchesToPoints + " " + my2/inchesToPoints);
       if (my1 < min(y1,y2) || my1 > max(y1,y2) || 
           dist(moveable.x,moveable.y,mx2,my2) < dist(moveable.x,moveable.y,mx1,mx2)) {
         // println("  swap");
         mx1 = mx2;
         my1 = my2;
       }
-      mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
+      if (delta < 0) {
+        mountRatio = -1;
+      } else {
+        mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
+      }
     } else { // we likely have a gear on one of the lines on the left
       // given the line formed by x1,y1 x2,y2, find the two spots which are desiredRadius from fixed center.
       float m = (y2-y1)/(x2-x1);
@@ -520,6 +528,9 @@ class LineRail implements Channel {
       float bprim = 2 * m * (c - fixed.y) - 2 * fixed.x;
       float cprim = fixed.x * fixed.x + (c - fixed.y) * (c - fixed.y) - r * r;
       float delta = bprim * bprim - 4*aprim*cprim;
+      if (delta == 0) {
+        println("zero delta");
+      }
       float mx1 = (-bprim + sqrt(delta)) / (2 * aprim);
       float my1 = m * mx1 + c;
       float mx2 = (-bprim - sqrt(delta)) / (2 * aprim); // use this if it's better
@@ -527,18 +538,24 @@ class LineRail implements Channel {
       // println("x1,y1 " + x1/inchesToPoints + " " + y1/inchesToPoints + " x2,y2 " + x2/inchesToPoints + " " + y2/inchesToPoints);
       // println(" aprim,bprim,cprim = " + aprim + " " + bprim + " " + cprim);
       // of the two spots which are best, and pick the one that is A) On the line and B) closest to the moveable gear's current position
-      // println("  mx1,mx2 " + mx1/inchesToPoints + " " + my1/inchesToPoints + " mx2,my2 " + mx2/inchesToPoints + " " + my2/inchesToPoints);
+      // println("  b m=" + m + " c=" + c + " aprim=" + aprim + " bprim=" + bprim + " cprim=" + cprim + " delta=" + delta);
+      // println("  b mx1,mx2 " + mx1/inchesToPoints + " " + my1/inchesToPoints + " mx2,my2 " + mx2/inchesToPoints + " " + my2/inchesToPoints);
       if (mx1 < min(x1,x2) || mx1 > max(x1,x2) || my1 < min(y1,y2) || my1 > max(y1,y2) ||
           dist(moveable.x,moveable.y,mx2,my2) < dist(moveable.x,moveable.y,mx1,mx2)) {
         // println("  swap");
         mx1 = mx2;
         my1 = my2;
       }
-      mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
+      if (delta < 0) {
+        mountRatio = -1;
+      } else {
+        mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
+      }
     }
     if (mountRatio < 0 || mountRatio > 1 || Float.isNaN(mountRatio)) {
       loadError = 1;
       mountRatio = 0;
+      // println("LOAD ERR");
     }
     mountRatio = constrain(mountRatio,0,1);
     moveable.mount(this,mountRatio);
@@ -895,8 +912,7 @@ class Gear implements Channel, Selectable {
       float tipAngle = tAngle*.1;
 
       if (doFill) {
-        int shade = 220;
-        fill(shade);
+        fill(220);
       } else {
        noFill();
       }
