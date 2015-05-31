@@ -7,3 +7,27 @@ web-export/
 code/
 ffmpeg*
 *.mp4
+
+int n = 256; // number of steps
+float TWO_PI = 3.14159*2;
+
+for (int i = 0; i < n; ++i) {
+    int red = 128 + sin(i*TWO_PI/n + 0) + 127;
+    int grn = 128 + sin(i*TWO_PI/n + TWO_PI/3) + 127;
+    int blu = 128 + sin(i*TWO_PI/n + 2*TWO_PI/3) + 127;
+    setColor(red, grn, blu);
+}
+
+
+void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v )
+void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v )
+
+void cycleMyColor(int r, int g, int b) {
+    float h,s,v,fr,fg,fb;
+    RGBtoHSV(r/255.0,g/255.0,b/255.0,&h,&s,&v);
+    h += 1/256.0;
+    h -= (int) h;
+    HSVtoRGB(&fr,&fg,&fb,h,s,v);
+    r = fr*255; g = fg*255; b = fb*255;
+    setColor(r,g,b);
+}
