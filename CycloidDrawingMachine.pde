@@ -85,7 +85,6 @@ boolean isRecording = false;  // for recording entire window
 boolean isStarted = false;
 boolean isMoving = false;
 boolean penRaised = true;
-boolean darkTheme = true;
 
 float lastPX = -1, lastPY = -1;
 int myFrameCount = 0;
@@ -107,7 +106,7 @@ void setup() {
   gFont = createFont("EurostileBold", int(32*seventyTwoScale));
   hFont = createFont("Courier", int(18*seventyTwoScale));
   nFont = createFont("Helvetica-Narrow", int(9*seventyTwoScale)); // loadFont("Notch-Font.vlw");
-  titlePic = loadImage(darkTheme? "title_dark.png" : "title.png");
+  titlePic = loadImage("title_dark.png");
   
   gearInit();
   activeGears = new ArrayList<Gear>();
@@ -181,6 +180,7 @@ void drawingSetup(int setupIdx, boolean resetPaper)
 {
   setupMode = setupIdx;
   loadError = 0;
+
   println("Drawing Setup: " + setupIdx);
   if (resetPaper) {
     isStarted = false;
@@ -443,7 +443,7 @@ void drawingSetup(int setupIdx, boolean resetPaper)
 void draw() 
 {
 
-    background(darkTheme? 128 : 255);
+    background(128);
 
   // Crank the machine a few times, based on current passesPerFrame - this generates new gear positions and drawing output
   for (int p = 0; p < passesPerFrame; ++p) {
@@ -495,16 +495,10 @@ void draw()
     noStroke();
 
     float logoScale = inchesToPoints/72.0;
-    if (darkTheme)
-      blendMode(ADD);
     image(titlePic, 0, height-titlePic.height*logoScale, titlePic.width*logoScale, titlePic.height*logoScale);
-    if (darkTheme)
-      blendMode(BLEND);
     for (Channel ch : rails) {
        ch.draw();
     }
-  
-    // discPoint.draw();
   
     for (Gear g : activeGears) {
       if (g != turnTable)

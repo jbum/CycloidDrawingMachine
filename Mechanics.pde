@@ -259,26 +259,24 @@ class ConnectingRod implements Channel, Selectable {
     float L = 18 * inchesToPoints;
     line(ap.x,ap.y, ap.x+cos(armAngle)*L, ap.y+sin(armAngle)*L);
     
-    if (passesPerFrame < 50) {
-      stroke(100,100,100,128);
-      fill(100,100,100);
-      strokeWeight(0.5);
-      // float notchOffset = 0.75*inchesToPoints;
-      textFont(nFont);
-      textAlign(CENTER);
-      pushMatrix();
-        translate(sp.x,sp.y);
-        rotate(atan2(ap.y-sp.y,ap.x-sp.x));
-        float ln = dist(ap.x,ap.y,sp.x,sp.y);
-        for (int i = 0; i < 29*2; ++i) {
-          float x = ln-(kCRNotchStart + kCRNotchIncr*i);
-          line(x, 6, x, -(6+(i % 2 == 1? 2 : 0)));
-          if (i % 2 == 1) {
-            text(""+(1+i/2),x,8);
-          }
+    stroke(100,100,100,128);
+    fill(100,100,100);
+    strokeWeight(0.5);
+    // float notchOffset = 0.75*inchesToPoints;
+    textFont(nFont);
+    textAlign(CENTER);
+    pushMatrix();
+      translate(sp.x,sp.y);
+      rotate(atan2(ap.y-sp.y,ap.x-sp.x));
+      float ln = dist(ap.x,ap.y,sp.x,sp.y);
+      for (int i = 0; i < 29*2; ++i) {
+        float x = ln-(kCRNotchStart + kCRNotchIncr*i);
+        line(x, 6, x, -(6+(i % 2 == 1? 2 : 0)));
+        if (i % 2 == 1) {
+          text(""+(1+i/2),x,8);
         }
-      popMatrix();
-    }
+      }
+    popMatrix();
   }
 }
 
@@ -434,21 +432,19 @@ class PenRig implements Selectable {
       line(-nibRad,0,nibRad,0);
       line(0,nibRad,0,-nibRad);
       
-      if (passesPerFrame < 50) {
-        textFont(nFont);
-        textAlign(CENTER);
-        fill(penColor);
-        noStroke();
-        ellipse(0,0,penWidth/2, penWidth/2);
+      textFont(nFont);
+      textAlign(CENTER);
+      fill(penColor);
+      noStroke();
+      ellipse(0,0,penWidth/2, penWidth/2);
 
-        stroke(255);
-        fill(255);
-        for (int i = 0; i < 15; ++i) {
-          float x = notchToDist(1+i/2.0);
-          line(x, 6, x, -(6+(i % 2 == 0? 2 : 0)));
-          if (i % 2 == 0) {
-            text(""+(1+i/2),x,8);
-          }
+      stroke(255);
+      fill(255);
+      for (int i = 0; i < 15; ++i) {
+        float x = notchToDist(1+i/2.0);
+        line(x, 6, x, -(6+(i % 2 == 0? 2 : 0)));
+        if (i % 2 == 0) {
+          text(""+(1+i/2),x,8);
         }
       }
       popMatrix();
@@ -471,7 +467,7 @@ class LineRail implements Channel {
 
   void draw() {
     noFill();
-    stroke(darkTheme? 110 : 235);
+    stroke(110);
     strokeWeight(.23*inchesToPoints);
 
     line(x1,y1, x2,y2);
@@ -493,7 +489,6 @@ class LineRail implements Channel {
       adiff -= TWO_PI;
     if (adiff < .01) {  // if rail is perpendicular to fixed circle
       mountRatio = (r-d1)/(d2-d1);
-      moveable.mount(this, mountRatio);
       // find position on line (if any) which corresponds to two radii
     } else if ( abs(x2-x1) < .01 ) {
       float m = 0;
@@ -640,7 +635,7 @@ class ArcRail implements Channel {
 
   void draw() {
     noFill();
-    stroke(darkTheme? 110 : 235);
+    stroke(110);
     strokeWeight(.23*inchesToPoints);
     arc(cx, cy, rad, rad, begAngle, endAngle);
   }
@@ -901,7 +896,7 @@ class Gear implements Channel, Selectable {
 
       if (doFill) {
         int shade = 220;
-        fill(shade,darkTheme? 255 : 192);
+        fill(shade);
       } else {
        noFill();
       }
@@ -937,16 +932,14 @@ class Gear implements Channel, Selectable {
 
       strokeWeight(1);
 
-      if (passesPerFrame < 50) {
-        pushMatrix();
-          translate(0, radius-20);
-          fill(127);
-          textFont(gFont);
-          textAlign(CENTER);
-          text(""+teeth, 0, 0);
-          noFill();
-        popMatrix();
-      }
+      pushMatrix();
+        translate(0, radius-20);
+        fill(127);
+        textFont(gFont);
+        textAlign(CENTER);
+        text(""+teeth, 0, 0);
+        noFill();
+      popMatrix();
 
       if (showMount) {
         noStroke();
@@ -966,19 +959,17 @@ class Gear implements Channel, Selectable {
             notchEnd = radius-max(radius*.1,8*seventyTwoScale);
             nbrLabels = 1 + int((notchEnd-notchStart-0.2*inchesToPoints)/(0.5*inchesToPoints));
           }
-          if (passesPerFrame < 50) {
-            textFont(nFont);
-            textAlign(CENTER);
+          textFont(nFont);
+          textAlign(CENTER);
 
-            stroke(128);
-            fill(128);
-            int nbrNotches = (nbrLabels)*2-1;
-            for (int i = 0; i < nbrNotches; ++i) {
-              float x = kGearLabelStart + i * 0.25 * inchesToPoints;
-              line(x,-(i % 2 == 0? kGearNotchHeightMaj : kGearNotchHeightMin), x, (i % 2 == 0? kGearNotchHeightMaj : kGearNotchHeightMin));
-              if (i % 2 == 0) {
-                text((i/2)+1,x,kGearNotchHeightMaj+0.2*inchesToPoints);
-              }
+          stroke(128);
+          fill(128);
+          int nbrNotches = (nbrLabels)*2-1;
+          for (int i = 0; i < nbrNotches; ++i) {
+            float x = kGearLabelStart + i * 0.25 * inchesToPoints;
+            line(x,-(i % 2 == 0? kGearNotchHeightMaj : kGearNotchHeightMin), x, (i % 2 == 0? kGearNotchHeightMaj : kGearNotchHeightMin));
+            if (i % 2 == 0) {
+              text((i/2)+1,x,kGearNotchHeightMaj+0.2*inchesToPoints);
             }
           }
           fill(192);
