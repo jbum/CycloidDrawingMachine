@@ -13,3 +13,6 @@ Try the live demo here:
 [krazydad.com/cdm/](http://krazydad.com/cdm/)
 
 This Processing (java) version has additional features, including the ability to create animated sequences.
+
+![Animated sequence](http://i.imgur.com/mVS5xef.gif "Animated sequence")
+
