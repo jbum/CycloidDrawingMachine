@@ -99,6 +99,7 @@ int penColorIdx = 0;
 float[] penWidths = {0.5, 1, 2, 3, 5, 7};
 float penWidth = 1;
 int penWidthIdx = 1;
+int loadError = 0; // 1 = gears can't snug
 
 void setup() {
   size(int(bWidth*inchesToPoints)+100, int(bHeight*inchesToPoints));
@@ -179,7 +180,7 @@ PenRig addPen(MountPoint penMount) {
 void drawingSetup(int setupIdx, boolean resetPaper)
 {
   setupMode = setupIdx;
-
+  loadError = 0;
   println("Drawing Setup: " + setupIdx);
   if (resetPaper) {
     isStarted = false;
@@ -263,9 +264,7 @@ void drawingSetup(int setupIdx, boolean resetPaper)
     crank.meshTo(turnTable);
   
     anchorTable.mount(anchorRail, .315); // this is a hack - we need to allow the anchorTable to snug to the crank regardless of it's size...
-    println("snugging anchortable");
     anchorTable.snugTo(crank);
-    println("done snugging anchortable");
     anchorTable.meshTo(crank);
 
     anchorHub.stackTo(anchorTable);
@@ -434,7 +433,9 @@ void drawingSetup(int setupIdx, boolean resetPaper)
 
   }
   turnTable.showMount = false;
-  
+  if (loadError != 0) {
+    println("Load Error" + loadError);
+  }
 }
 
 
@@ -648,12 +649,12 @@ void keyPressed() {
       isShifting = true;
       break;
     default:
-     println("KeyCode pressed: " + (0 + keyCode));
+     // println("KeyCode pressed: " + (0 + keyCode));
      break;
     }
     break;
    default:
-     println("Key pressed: " + (0 + key));
+     // println("Key pressed: " + (0 + key));
      break;
   }
 }

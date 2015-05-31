@@ -46,7 +46,7 @@ void helpDraw()
   }
   else if (startupAlert) {
     long elapsed = millis() - helpStartMS;
-    float alpha = constrain(map(elapsed, 5*1000, 8*1000, 1, 0),0,1);
+    float alpha = constrain(map(elapsed, 10*1000, 13*1000, 1, 0),0,1);
     if (alpha <= 0.0001) {
       startupAlert = false;
     }

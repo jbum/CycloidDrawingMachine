@@ -66,7 +66,6 @@ int computeCyclicRotations() {
         ratioDenom /= gcd;
       }
       int b = min(ratioNom,ratioDenom) / GCD(ratioNom, ratioDenom);
-      // println(g.teeth  + " " + ratioNom + "/" + ratioDenom + "  b = " + b);
       a = max(a,max(a,b)*min(a,b)/ GCD(a, b));
     }
     idx += 1;
@@ -193,7 +192,6 @@ void saveCallback(File fileSelection)
     println("Canceled");
     return;
   }
-  println("Selection: " + fileSelection);
   JSONObject settings = new JSONObject();
   settings.setInt("layout", setupMode);
 
@@ -225,7 +223,6 @@ void saveCallback(File fileSelection)
 
 void loadSettings() 
 {
-  println("Load Settings");
   selectInput("Select a file to load settings from:", "loadCallback");
   
 }
