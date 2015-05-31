@@ -10,7 +10,7 @@ static final float mmToInches = 1/25.4;
 float seventyTwoScale = inchesToPoints / 72.0; // Don't change this
 
 int[][] setupTeeth = {
-    {120,98},
+    {150,98},
     {120,100,98,48},
     {150,50,100,36,40},
     {150, 98, 100},
@@ -20,7 +20,7 @@ int[][] setupTeeth = {
   };
 
 float[][] setupMounts = { // mount point measurements
-  {0.1, 4, 11},
+  {0.1, 3.5, 9.0},
   {1.5, 3,  10},
   {1-0.1027, 1.5, 12},
   {2, 4, 0.8, 8, 11},
@@ -507,8 +507,10 @@ void draw()
     // discPoint.draw();
   
     for (Gear g : activeGears) {
-      g.draw();
+      if (g != turnTable)
+        g.draw();
     }
+    turnTable.draw(); // draw this last
   
     penRig.draw();
   

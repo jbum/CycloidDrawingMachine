@@ -28,7 +28,7 @@ static final float kCRLabelStart = 1*inchesToPoints;
 static final float kPenLabelStart = 4.75*inchesToPoints;
 static final float kPenLabelIncr = -0.5*inchesToPoints;
 static final float kPenNotchIncr = -0.25*inchesToPoints;
-
+static final float kPaperRad = 4.625*inchesToPoints;
 class MountPoint implements Channel, Selectable {
   Channel itsChannel = null;
   float itsMountLength;
@@ -517,7 +517,6 @@ class LineRail implements Channel {
         my1 = my2;
       }
       mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
-      println("Mount Ratioa: " + mountRatio + " " + mx1 + " " + my1);
     } else { // we likely have a gear on one of the lines on the left
       // given the line formed by x1,y1 x2,y2, find the two spots which are desiredRadius from fixed center.
       float m = (y2-y1)/(x2-x1);
@@ -541,7 +540,6 @@ class LineRail implements Channel {
         my1 = my2;
       }
       mountRatio = dist(x1,y1,mx1,my1)/dist(x1,y1,x2,y2);
-      println("Mount Ratiob: " + mountRatio + " " + mx1 + " " + my1);
     }
     if (mountRatio < 0 || mountRatio > 1 || Float.isNaN(mountRatio)) {
       loadError = 1;
@@ -902,7 +900,8 @@ class Gear implements Channel, Selectable {
       float tipAngle = tAngle*.1;
 
       if (doFill) {
-        fill(240,240,240,darkTheme? 255 : 192);
+        int shade = 220;
+        fill(shade,darkTheme? 255 : 192);
       } else {
        noFill();
       }
@@ -925,6 +924,17 @@ class Gear implements Channel, Selectable {
         vertex(r2*cos(a1+tAngle), r2*sin(a1+tAngle));
       }
       endShape();
+
+      if (this == turnTable) {
+        noStroke();
+        fill(255,192);
+        beginShape();
+        for (int i = 0; i < 8; ++i) {
+          vertex(kPaperRad*cos(i*TWO_PI/8), kPaperRad*sin(i*TWO_PI/8));          
+        }
+        endShape();
+      }
+
       strokeWeight(1);
 
       if (passesPerFrame < 50) {
