@@ -11,7 +11,7 @@ float seventyTwoScale = inchesToPoints / 72.0; // Don't change this
 
 int[][] setupTeeth = {
     {150,72},
-    {120,94,90,34},
+    {150,94,98,30},
     {150,50,100,34,40},
     {144, 100, 72},
     {150, 98, 100},
@@ -21,7 +21,7 @@ int[][] setupTeeth = {
 
 float[][] setupMounts = { // mount point measurements
   {0, 3.3838, 10.625},
-  {1.5, 4.4798,  10},
+  {0.82661605, 4.216946, 9.375},
   {0.8973, 1.5, 12},
   {4, 4, 0.8, 2, 8.625},
   {0.7, 2, 4, 8, 9},
@@ -31,7 +31,7 @@ float[][] setupMounts = { // mount point measurements
 
 float[][] setupPens = {
   {7.125,-55},
-  {6,90},
+  {1,-35},
   {3,-90},
   {5.75,-65},
   {6,-90},
@@ -41,7 +41,7 @@ float[][] setupPens = {
 
 Boolean[][] setupInversions = {
   {true},
-  {false},
+  {true},
   {false},
   {false, false},
   {false, false},
