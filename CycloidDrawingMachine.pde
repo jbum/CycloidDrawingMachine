@@ -491,6 +491,8 @@ void draw()
 
   // Draw the machine onscreen in it's current state
   pushMatrix();
+    drawFulcrumLabels();
+
     fill(200);
     noStroke();
 

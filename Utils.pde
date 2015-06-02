@@ -273,3 +273,32 @@ void loadCallback(File fileSelection)
   deselect();
   drawingSetup(setupMode, false);
 }
+
+void drawFulcrumLabels() {
+    textFont(nFont);
+    textAlign(CENTER);
+    fill(64);
+    stroke(92);
+    strokeWeight(0.5);
+    pushMatrix();
+      translate(3.1*inchesToPoints, 10.23*inchesToPoints);
+      rotate(PI/2);
+      int nbrNotches = 39;
+      float startNotch = 0.25*inchesToPoints;
+      float notchIncr = 0.25*inchesToPoints;
+      float minNotch = 0.9*inchesToPoints;
+      float lilNotch = minNotch/2;
+      float widIncr = 1.722*inchesToPoints/nbrNotches;
+      float notchSize = minNotch;
+      float notchX = -startNotch;
+      for (int n = 0; n < 39; ++n) {
+        line(notchX,0,notchX,n % 2 == 1? notchSize : lilNotch);
+        if (n % 2 == 1) {
+          text("" + (n/2+1),notchX,lilNotch); 
+        }
+        notchSize += widIncr;
+        notchX -= notchIncr;
+      }
+    popMatrix();
+
+}
