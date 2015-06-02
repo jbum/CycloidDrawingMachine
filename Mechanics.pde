@@ -613,12 +613,15 @@ class ArcRail implements Channel {
     
     if (d > r1+r2) {
       println("  circles are too far apart");
+      loadError = 1;
       return;
     } else if (abs(d) < .01 && abs(r1-r2) < .01) {
       println("  circles coincide");
+      loadError = 1;
       return;
     } else if (d + min(r1,r2) < max(r1,r2)) {
       println("  one circle contains the other");
+      loadError = 1;
       return;
     }
     float a = (r1*r1 - r2*r2 + d*d) / (2*d);
@@ -641,6 +644,7 @@ class ArcRail implements Channel {
       ma = atan2(best.y-cy,best.x-cx);
       if (ma < begAngle || ma > endAngle) {
         println("Intersection points don't fall on arc rail");
+        loadError = 1;
         return;
       }
     }
@@ -842,6 +846,8 @@ class Gear implements Channel, Selectable {
     float d = moveable.radius+fixed.radius+meshGap;
 
     float mountRadDist = this.radius*d/d2;
+    if (mountRadDist < 0 || mountRadDist > this.radius)
+      loadError = 1;
     float mountNotch = distToNotch(mountRadDist);
 
     moveable.mount(this, mountNotch);
