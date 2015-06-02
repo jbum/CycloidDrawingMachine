@@ -16,3 +16,4 @@ This Processing (java) version has additional features, including the ability to
 
 ![Animated sequence](http://i.imgur.com/mVS5xef.gif "Animated sequence")
 
+CDMS is licensed under the [MIT License](https://github.com/jbum/CycloidDrawingMachine/blob/master/LICENSE.txt)
