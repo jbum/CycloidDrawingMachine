@@ -16,7 +16,7 @@ int[][] setupTeeth = {
     {144, 100, 72},
     {150, 98, 100},
     {150, 100, 74},
-    {150,50,90,36,34,50,72},
+    {150,50,100,34,40,50,50},
   };
 
 float[][] setupMounts = { // mount point measurements
@@ -26,7 +26,7 @@ float[][] setupMounts = { // mount point measurements
   {4, 4, 0.8, 2, 8.625},
   {0.7, 2, 4, 8, 9},
   {0.7, 3.3838, 4, 0.21, 12.75, 5.5, 5.25},
-  {2.5, 1.0, 14.125},
+  {2.5, 1.0, 14.0},
 };
 
 float[][] setupPens = {
@@ -443,7 +443,6 @@ void drawingSetup(int setupIdx, boolean resetPaper)
 void draw() 
 {
 
-    background(128);
 
   // Crank the machine a few times, based on current passesPerFrame - this generates new gear positions and drawing output
   for (int p = 0; p < passesPerFrame; ++p) {
@@ -489,7 +488,9 @@ void draw()
     }
   }
 
+
   // Draw the machine onscreen in it's current state
+  background(128);
   pushMatrix();
     drawFulcrumLabels();
 

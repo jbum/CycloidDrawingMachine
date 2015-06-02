@@ -93,7 +93,7 @@ void completeDrawing()
       println("Total turntable cycles needed = " + totalRotations);
     int framesPerRotation = int(TWO_PI / crankSpeed);
     myLastFrame = framesPerRotation * totalRotations + 1;
-    passesPerFrame = isRecording? 10 : 360*2;
+    passesPerFrame = isRecording? 10 : 360*2; // this sets up each pass to do 1 cycle
     isMoving = true;
 }
 
