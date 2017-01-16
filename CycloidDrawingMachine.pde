@@ -101,7 +101,10 @@ int penWidthIdx = 1;
 int loadError = 0; // 1 = gears can't snug
 
 void setup() {
-  size(int(bWidth*inchesToPoints)+100, int(bHeight*inchesToPoints));
+  // println(int(bWidth*inchesToPoints)+100);
+  // println(int(bHeight*inchesToPoints));
+  size(1406,828);
+  // size(int(bWidth*inchesToPoints)+100, int(bHeight*inchesToPoints));
   ellipseMode(RADIUS);
   gFont = createFont("EurostileBold", int(32*seventyTwoScale));
   hFont = createFont("Courier", int(18*seventyTwoScale));
@@ -692,5 +695,3 @@ void mousePressed()
     }
   }
 }
-
-
