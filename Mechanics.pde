@@ -667,7 +667,7 @@ int[] rgTeeth = { // regular gears
   30, 32, 34, 36, 40, 48, 50, 58, 60, 66, 72, 74, 80, 90, 94, 98, 100, 108, 
  };
 int [] ttTeeth = { // turntable gears
-   120, 144, 150, 151
+   120, 144, 150
 };
 
 class GearSetup {
