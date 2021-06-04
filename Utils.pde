@@ -15,18 +15,26 @@ void saveSnapshot(String prefix)
     }
 }
 
+void saveSVGPathFragment() {
+  println("Saving Path Fragment");
+  svgPathFragments += String.format("<g stroke=\"#%06x\" fill=\"none\" stroke-width=\"%.1f\" >\n<path d=\"%s\" />\n</g>\n",((int)penColor) & 0x00FFFFFF,(float) penWidth,svgPath);
+  svgPath = "";
+}
+
 void saveSnapshotAs(String sf)
 {
     if (svgMode) {
       // println("Saving Path to SVG " + sf);
+      saveSVGPathFragment();
       PrintWriter fw;
       fw = createWriter(sf);
       fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
       fw.println("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
       fw.println("<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 648 648\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" xmlns:serif=\"http://www.serif.com/\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;\">");
-      fw.println(String.format("<g stroke=\"#%06x\" fill=\"none\" stroke-width=\"%.1f\" >",((int)penColor) & 0x00FFFFFF,(float) penWidth));
-      fw.println(String.format("<path d=\"%s\" />",svgPath));
-      fw.println("</g>\n</svg>");
+      fw.write(svgPathFragments);
+      //fw.println(String.format("<g stroke=\"#%06x\" fill=\"none\" stroke-width=\"%.1f\" >",((int)penColor) & 0x00FFFFFF,(float) penWidth));
+      //fw.println(String.format("<path d=\"%s\" />\n</g>",svgPath));
+      fw.println("</svg>");
       println(svgPath);
       fw.flush();
       fw.close();
@@ -115,6 +123,7 @@ void completeDrawing()
 void clearPaper() 
 {
     svgPath = "";
+    svgPathFragments = "";
     paper.beginDraw();
     paper.clear();
     paper.endDraw();
@@ -154,6 +163,7 @@ void deselect() {
 }
 
 void advancePenColor(int direction) {
+  saveSVGPathFragment();
   penColorIdx = (penColorIdx + penColors.length + direction) % penColors.length;
   penColor = penColors[penColorIdx]; 
   paper.beginDraw();
@@ -163,6 +173,7 @@ void advancePenColor(int direction) {
 }
 
 void advancePenWidth(int direction) {
+  saveSVGPathFragment();
   penWidthIdx = (penWidthIdx + penWidths.length + direction) % penWidths.length;
   penWidth = penWidths[penWidthIdx]; 
   paper.beginDraw();
@@ -175,7 +186,6 @@ void toggleOutputmode()
 {
   svgMode = !svgMode;
   if (svgMode) {
-    clearPaper();
     println("SVG ON - saved frames will be in SVG format");
   } else {
     println("SVG OFF - saved frames will be in PNG format");

@@ -81,6 +81,8 @@ int passesPerFrame = 1;
 boolean hiresMode = false;
 boolean svgMode = false;
 String svgPath = "";
+String svgPathFragments = "";
+
 
 boolean animateMode = false; // for tweening finished drawings
 boolean isRecording = false;  // for recording entire window
@@ -443,11 +445,8 @@ void drawingSetup(int setupIdx, boolean resetPaper)
   }
 }
 
-
-
 void draw() 
 {
-
 
   // Crank the machine a few times, based on current passesPerFrame - this generates new gear positions and drawing output
   for (int p = 0; p < passesPerFrame; ++p) {
@@ -467,7 +466,8 @@ void draw()
       // paper.smooth(8);
       paper.beginDraw();
       if (!isStarted) {
-        svgPath = ""; 
+        svgPath = "";
+        svgPathFragments = "";
         paper.clear();
         paper.noFill();
         paper.stroke(penColor);
@@ -478,12 +478,10 @@ void draw()
         isStarted = true;
       } else if (!penRaised) {
         paper.line(lastPX, lastPY, px, py);
-        if (svgMode) {
-          if (svgPath.isEmpty()) {
-            svgPath = String.format("M%.1f,%.1f",lastPX,lastPY);
-          }
-          svgPath += String.format("L%.1f,%.1f",px,py);
+        if (svgPath.isEmpty()) {
+          svgPath = String.format("M%.1f,%.1f",lastPX,lastPY);
         }
+        svgPath += String.format("L%.1f,%.1f",px,py);
       }
       paper.endDraw();
       lastPX = px;
@@ -494,9 +492,7 @@ void draw()
         passesPerFrame = 1;
         isMoving = false;
         isRecording = false;
-        if (svgMode) {
-          svgPath += "Z";
-        }
+        svgPath += "Z";
         nextTween();
         break;
       }
