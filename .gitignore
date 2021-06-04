@@ -2,7 +2,9 @@ untitled.png
 cdm*.png
 override_*.tsv
 frame*.png
+frame*.svg
 snapshot*.png
+snapshot*.svg
 web-export/
 code/
 ffmpeg*

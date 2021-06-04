@@ -16,6 +16,7 @@ String[] helpLines = {
     "T      save tween endpoint",
     "S      animate finished drawings to endpoint",
     "H      toggle Hi-res",
+    "V      toggle SVG/PNG output",
     "Ctrl-S save setup",
     "Ctrl-O load setup",
 };

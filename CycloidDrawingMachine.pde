@@ -79,6 +79,8 @@ float paperWidth = 9*inchesToPoints*paperScale;
 float crankSpeed = TWO_PI/720;  // rotation per frame  - 0.2 is nice.
 int passesPerFrame = 1;
 boolean hiresMode = false;
+boolean svgMode = false;
+String svgPath = "";
 
 boolean animateMode = false; // for tweening finished drawings
 boolean isRecording = false;  // for recording entire window
@@ -120,6 +122,7 @@ void setup() {
   // Board Setup
   
   paper = createGraphics(int(paperWidth), int(paperWidth));
+  paper.smooth(8);
   clearPaper();
 
   discPoint = new MountPoint("DP", pCenterX, pCenterY);
@@ -461,10 +464,11 @@ void draw()
       float px = paperWidth/2 + cos(a-turnTable.rotation)*l*paperScale;
       float py = paperWidth/2 + sin(a-turnTable.rotation)*l*paperScale;
     
+      // paper.smooth(8);
       paper.beginDraw();
       if (!isStarted) {
+        svgPath = ""; 
         paper.clear();
-        paper.smooth(8);
         paper.noFill();
         paper.stroke(penColor);
         paper.strokeJoin(ROUND);
@@ -474,6 +478,12 @@ void draw()
         isStarted = true;
       } else if (!penRaised) {
         paper.line(lastPX, lastPY, px, py);
+        if (svgMode) {
+          if (svgPath.isEmpty()) {
+            svgPath = String.format("M%.1f,%.1f",lastPX,lastPY);
+          }
+          svgPath += String.format("L%.1f,%.1f",px,py);
+        }
       }
       paper.endDraw();
       lastPX = px;
@@ -484,12 +494,14 @@ void draw()
         passesPerFrame = 1;
         isMoving = false;
         isRecording = false;
+        if (svgMode) {
+          svgPath += "Z";
+        }
         nextTween();
         break;
       }
     }
   }
-
 
   // Draw the machine onscreen in it's current state
   background(128);
@@ -615,6 +627,9 @@ void keyPressed() {
     break;
   case 'H':
     toggleHiresmode();
+    break;
+  case 'V':
+    toggleOutputmode();
     break;
   case '[':
     advancePenColor(-1);

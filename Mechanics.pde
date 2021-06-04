@@ -1004,5 +1004,3 @@ class Gear implements Channel, Selectable {
     popMatrix();
   }
 }
-
-

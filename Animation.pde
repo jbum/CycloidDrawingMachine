@@ -61,7 +61,7 @@ void nextTween()
   tweenFrameCtr += 1;
   tweenIdx += 1;
 
-  saveSnapshotAs("frame_" + df.format(tweenFrameCtr) + ".png");
+  saveSnapshotAs("frame_" + df.format(tweenFrameCtr) + (svgMode? ".svg" : ".png"));
   println("Frame: " + df.format(tweenIdx) + "/" + df.format(tweenSteps));
 
   if (tweenIdx >= tweenSteps) {

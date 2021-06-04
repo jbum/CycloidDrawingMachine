@@ -1,6 +1,6 @@
 String saveFilename(String prefix)
 {
-  String sf = prefix + year() + "-" + month() + "-" + day() + "_" + hour() + "." + minute() + "." + second() + ".png";
+  String sf = prefix + year() + "-" + month() + "-" + day() + "_" + hour() + "." + minute() + "." + second() + (svgMode? ".svg" : ".png");
   return sf;
 }
 
@@ -17,13 +17,28 @@ void saveSnapshot(String prefix)
 
 void saveSnapshotAs(String sf)
 {
-    PGraphics tmp = createGraphics(paper.width, paper.height);
-    tmp.beginDraw();
-    tmp.smooth();
-    tmp.background(255);
-    tmp.image(paper, 0, 0);
-    tmp.endDraw();
-    tmp.save(sf);
+    if (svgMode) {
+      // println("Saving Path to SVG " + sf);
+      PrintWriter fw;
+      fw = createWriter(sf);
+      fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+      fw.println("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
+      fw.println("<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 648 648\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" xmlns:serif=\"http://www.serif.com/\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;\">");
+      fw.println(String.format("<g stroke=\"#%06x\" fill=\"none\" stroke-width=\"%.1f\" >",((int)penColor) & 0x00FFFFFF,(float) penWidth));
+      fw.println(String.format("<path d=\"%s\" />",svgPath));
+      fw.println("</g>\n</svg>");
+      println(svgPath);
+      fw.flush();
+      fw.close();
+    } else {
+      PGraphics tmp = createGraphics(paper.width, paper.height);
+      tmp.smooth();
+      tmp.beginDraw();
+      tmp.background(255);
+      tmp.image(paper, 0, 0);
+      tmp.endDraw();
+      tmp.save(sf);
+    }
 }
 
 String getSetupString()
@@ -99,9 +114,10 @@ void completeDrawing()
 
 void clearPaper() 
 {
-     paper.beginDraw();
-     paper.clear();
-     paper.endDraw();
+    svgPath = "";
+    paper.beginDraw();
+    paper.clear();
+    paper.endDraw();
 }
 
 void measureGears() {
@@ -155,6 +171,16 @@ void advancePenWidth(int direction) {
   println("Pen width set to " + penWidth);
 }
 
+void toggleOutputmode()
+{
+  svgMode = !svgMode;
+  if (svgMode) {
+    clearPaper();
+    println("SVG ON - saved frames will be in SVG format");
+  } else {
+    println("SVG OFF - saved frames will be in PNG format");
+  }
+}
 
 void toggleHiresmode()
 {
@@ -170,6 +196,7 @@ void toggleHiresmode()
   }
   paperWidth = 9*inchesToPoints*paperScale;
   paper = createGraphics(int(paperWidth), int(paperWidth));
+  paper.smooth(8);
   clearPaper();
   paper.beginDraw();
   paper.image(oldPaper,0,0,paper.width,paper.height);
